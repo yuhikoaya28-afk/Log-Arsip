@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Arsip Bapenda</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #e0f2f1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
         .container { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 90%; max-width: 400px; }
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #26C6DA; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 25px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        h2 { color: #00796b; margin-bottom: 10px; }
-        .success-icon { color: #4caf50; font-size: 60px; display: none; margin: 20px 0; }
     </style>
 </head>
 <body>
 <div class="container">
     <h2 id="title">Memverifikasi Akses...</h2>
-    <div class="loader" id="loader"></div>
-    <div class="success-icon" id="success-icon">✔</div>
-    <p id="message">Mohon tunggu, sedang mencatat log akses ke folder arsip.</p>
+    <p id="message">Mencatat log akses ke folder arsip.</p>
 </div>
-
 <script>
     const SUPABASE_URL = "https://hnvtverlroktllldxuqe.supabase.co";
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhudnR2ZXJscm9rdGxsbGR4dXFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA3MTg5NjcsImV4cCI6MjA1NjI5NDk2N30.TId-z-H4l-7p-3Z-H4l-7p-3Z-H4l-7p-3Z"; 
@@ -31,14 +23,11 @@
     async function proses() {
         try {
             await _supabase.from('bapenda_auth_logs').insert([{ 
-                keterangan: "Akses Folder Arsip (Domain Baru)",
-                perangkat: navigator.userAgent.substring(0, 100),
-                status: "Berhasil"
+                qr_content: "Akses Folder Arsip",
+                scanner_id: navigator.userAgent.substring(0, 50),
+                status: "SUCCESS"
             }]);
-            document.getElementById('title').innerText = "Akses Disetujui";
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('success-icon').style.display = 'block';
-            setTimeout(() => { window.location.href = DRIVE_LINK; }, 1500);
+            window.location.href = DRIVE_LINK;
         } catch (e) { window.location.href = DRIVE_LINK; }
     }
     window.onload = proses;
