@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Cetak QR Arsip Bapenda</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 30px; }
+        .qr-poster { background: white; padding: 40px; border-radius: 30px; border: 15px solid #26C6DA; text-align: center; width: 360px; position: relative; }
+        #qrcode { margin: 25px auto; display: flex; justify-content: center; border: 10px solid white; }
+        .header-text { color: #00796b; font-size: 22px; font-weight: bold; }
+        .footer-tag { background: #26C6DA; color: white; padding: 15px; border-radius: 50px; margin-top: 20px; font-weight: bold; font-size: 24px; }
+        .logo-center { position: absolute; top: 51.5%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: white; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        .logo-center img { width: 100%; height: auto; }
+        @media print { .no-print { display: none; } body { background: white; } }
+    </style>
+</head>
+<body>
+    <div class="no-print" style="margin-bottom: 20px;">
+        <button onclick="window.print()" style="padding: 10px 20px; cursor: pointer;">CETAK QR SEKARANG</button>
+    </div>
+
+    <div class="qr-poster">
+        <div class="header-text">BAPENDA BARITO TIMUR</div>
+        <div style="font-size: 14px; color: #666;">Monitoring Arsip Digital</div>
+        <div style="position: relative;">
+            <div id="qrcode"></div>
+            <div class="logo-center">
+                <img src="logo.png" onerror="this.src='https://via.placeholder.com/80?text=BPD'">
+            </div>
+        </div>
+        <div class="footer-tag">SCAN DI SINI</div>
+    </div>
+
+    <script>
+        // MENGGUNAKAN LINK PUBLIK VERCEL ANDA
+        new QRCode(document.getElementById("qrcode"), {
+            text: "https://log-arsip.vercel.app/",
+            width: 270, height: 270,
+            colorDark : "#000000", colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H 
+        });
+    </script>
+</body>
+</html>
