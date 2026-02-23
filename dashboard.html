@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring Arsip - Bapenda</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f4; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        .header-section { border-bottom: 3px solid #26C6DA; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        h2 { color: #00796b; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-size: 20px; }
+        .sub-title { color: #666; font-size: 13px; margin-top: 5px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: #26C6DA; color: white; padding: 12px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #ddd; font-size: 13px; }
+        tr:hover { background-color: #f1f8f9; }
+        
+        .status-badge { background: #4caf50; color: white; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: bold; }
+        .refresh-btn { background: #00796b; color: white; border: none; padding: 10px 18px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .refresh-btn:hover { background: #004d40; }
+        
+        .link-info { font-size: 12px; color: #00796b; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <div>
+            <h2>Monitoring Akses Arsip Digital</h2>
+            <p class="sub-title">Data realtime pengunjung dari <b>log-arsip.vercel.app</b></p>
+        </div>
+        <button class="refresh-btn" onclick="fetchLogs()">Refresh Data</button>
+    </div>
+    
+    <div class="link-info">Source: https://log-arsip.vercel.app/</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Waktu Akses</th>
+                <th>Aktivitas</th>
+                <th>Info Perangkat</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="log-table">
+            <tr>
+                <td colspan="4" style="text-align:center;">Menghubungkan ke server...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // KONFIGURASI SUPABASE (TETAP SAMA)
+    const SUPABASE_URL = "https://hnvtverlroktllldxuqe.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhudnR2ZXJscm9rdGxsbGR4dXFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA3MTg5NjcsImV4cCI6MjA1NjI5NDk2N30.TId-z-H4l-7p-3Z-H4l-7p-3Z-H4l-7p-3Z";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function fetchLogs() {
+        const { data, error } = await _supabase
+            .from('bapenda_auth_logs')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(20);
+
+        if (error) {
+            console.error("Gagal mengambil log:", error);
+            return;
+        }
+
+        const tableBody =
